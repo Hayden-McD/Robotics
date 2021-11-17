@@ -23,34 +23,49 @@ float CenterSensordata;
 
 void setup() {
   Serial.begin(9600);
-  //calibrate();
+  calibrate();
 }
 
-//Calibrates the sensor
-//void calibrate()
-//{
-//  Serial.print("Starting line sensor calibration");
-//  int duration = 300;
-//  for (int i = 0; i < duration; i++)
-//  {
-//    int value = read_sensor();
-//    if (value <= line_min)
-//    {
-//      line_min = value;
-//      }
-//    if (value >= line_max)
-//    {
-//      line_max = value;
-//      }
-//      
-//    motor_turn_left();
-//    motor_turn_right();
-//    motor_reverse();
-//    }
-//  line_median = ((line_max - line_min) / 2) + line_min;
-//  Serial.print("Calibrated");
-//  }
 
+//Calibrates the sensor
+void calibrate()
+{
+  Serial.print("Starting line sensor calibration");
+  int duration = 300;
+  for (int i = 0; i < duration; i++)
+  {
+    int value = read_sensor();
+    if (value <= line_min)
+    {
+      line_min = value;
+      }
+    if (value >= line_max)
+    {
+      line_max = value;
+      }
+      
+    motor_turn_left();
+    motor_turn_right();
+    motor_reverse();
+    }
+  line_median = ((line_max - line_min) / 2) + line_min;
+  Serial.print("Calibrated");
+  }
+
+
+float read_sensor()
+  {
+  int iters = 100;
+  float sensordata;
+  for (int i = 0; i < iters; i++)
+  {
+    sensordata = sensordata + center_sensor.read();
+    }
+  sensordata = sensordata / iters;
+  return sensordata;
+  }
+
+  
 void loop() {
   transition(robot_state);
   
@@ -189,7 +204,6 @@ void motor_turn_left()
 {
   Serial.println("TURN LEFT");
   motors.pivot(100);
-  
   }
 
 
@@ -197,7 +211,6 @@ void motor_turn_right()
 {
   Serial.println("TURN RIGHT");
   motors.pivot(-100);
-  
   }
 
 
@@ -205,5 +218,4 @@ void motor_reverse()
 {
   Serial.println("Reverse");
   motors.drive(80);
-  
   }

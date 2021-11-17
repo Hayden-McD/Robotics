@@ -1,9 +1,9 @@
 #include <RedBot.h>
 #include <RedBotSoftwareSerial.h>
 
-RedBotSensor left_sensor = RedBotSensor(A1);
-RedBotSensor center_sensor = RedBotSensor(A3);
-RedBotSensor right_sensor = RedBotSensor(A6);
+RedBotSensor left_sensor = RedBotSensor(A0);
+RedBotSensor center_sensor = RedBotSensor(A1);
+RedBotSensor right_sensor = RedBotSensor(A4);
 RedBotMotors motors;
 
 #define s_drive 0
@@ -20,7 +20,6 @@ float TotalSensordata;
 float RightSensordata;
 float LeftSensordata;
 float CenterSensordata;
-
 
 void setup() {
   Serial.begin(9600);

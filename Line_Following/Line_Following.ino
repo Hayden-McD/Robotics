@@ -24,33 +24,33 @@ float CenterSensordata;
 
 void setup() {
   Serial.begin(9600);
-  calibrate();
+  //calibrate();
 }
 
 //Calibrates the sensor
-void calibrate()
-{
-  Serial.print("Starting line sensor calibration");
-  int duration = 300;
-  for (int i = 0; i < duration; i++)
-  {
-    int value = read_sensor();
-    if (value <= line_min)
-    {
-      line_min = value;
-      }
-    if (value >= line_max)
-    {
-      line_max = value;
-      }
-      
-    motor_turn_left();
-    motor_turn_right();
-    motor_reverse();
-    }
-  line_median = ((line_max - line_min) / 2) + line_min;
-  Serial.print("Calibrated");
-  }
+//void calibrate()
+//{
+//  Serial.print("Starting line sensor calibration");
+//  int duration = 300;
+//  for (int i = 0; i < duration; i++)
+//  {
+//    int value = read_sensor();
+//    if (value <= line_min)
+//    {
+//      line_min = value;
+//      }
+//    if (value >= line_max)
+//    {
+//      line_max = value;
+//      }
+//      
+//    motor_turn_left();
+//    motor_turn_right();
+//    motor_reverse();
+//    }
+//  line_median = ((line_max - line_min) / 2) + line_min;
+//  Serial.print("Calibrated");
+//  }
 
 void loop() {
   transition(robot_state);
@@ -153,7 +153,7 @@ String test_sensor()
 {
   String sensor_reading = "";
 
-  if (center_sensor.read() > line_min && right.read() > line_min && left_sensor.read() > line_min)
+  if (center_sensor.read() > line_min && right_sensor.read() > line_min && left_sensor.read() > line_min)
   {
     sensor_reading = "drive";
     }

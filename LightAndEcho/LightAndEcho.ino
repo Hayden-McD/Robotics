@@ -3,8 +3,8 @@
 #include <NewPing.h>
 
 RedBotMotors motors;
-RedBotSensor left = RedBotSensor(A2);
-RedBotSensor right = RedBotSensor(A3);
+RedBotSensor left_sensor = RedBotSensor(A2);
+RedBotSensor right_sensor = RedBotSensor(A3);
 
 #define s_drive 0
 #define s_turn_left 1
@@ -37,10 +37,11 @@ void loop() {
   Serial.print(sonar_right.ping_cm());
   Serial.println();
 
-//  Serial.print(left.read());
-//  Serial.print("\t");
-//  Serial.print(right.read());
-//  Serial.println();
+  Serial.print("Left Sensor");
+  Serial.print(left_sensor.read());
+  Serial.print("Right Sensor");
+  Serial.print(right_sensor.read());
+  Serial.println();
   transition(robot_state);
   
   do_behaviour(robot_state);
@@ -119,8 +120,7 @@ void transition(int state)
 
 String test_sensor()
 {
-  int minDist = 15;
-  
+  int minDist = 20;
   String sensor_reading = "";
 
   if (sonar_left.ping_cm() > minDist && sonar_right.ping_cm() > minDist)
@@ -140,26 +140,28 @@ String test_sensor()
 
  void follow_light()
  {
-  if(left.read() > 350 && right.read() > 350)
+  if(left_sensor.read() > 350 && right_sensor.read() > 350)
   {
       motor_drive();
   }
 
-  if(left.read() < 350 && right.read() < 350)
+  if(left_sensor.read() < 350 && right_sensor.read() < 350)
   {
+    Serial.print("Going towards the light");
       motor_drive();
   }
-  else if(right.read() > left.read())
+  else if(right_sensor.read() > left_sensor.read())
   {
-    motors.leftDrive(-150);
-    motors.rightDrive(-100);
+    Serial.print("Turning right");
+    motors.leftDrive(120);
+    motors.rightDrive(90);
   }
-  else if (left.read() > right.read())
+  else if (left_sensor.read() > right_sensor.read())
   {
-    motors.leftDrive(-100);
-    motors.rightDrive(-150); 
+    Serial.print("Turning left");
+    motors.leftDrive(90);
+    motors.rightDrive(120); 
   }
-  
  }
 
  bool testBumped() {
@@ -167,8 +169,8 @@ String test_sensor()
   bool bump = accel.checkBump();
   if (bump == true) {
       Serial.print("Bumped");
-      motors.leftDrive(150);
-      motors.rightDrive(100);
+      motors.leftDrive(75);
+      motors.rightDrive(50);
       delay(700);
   }
   return bump;
@@ -177,20 +179,20 @@ String test_sensor()
 void motor_drive()
 {
   Serial.println("Driving...");
-  motors.leftDrive(-100);
-  motors.rightDrive(-100);
+  motors.leftDrive(120);
+  motors.rightDrive(120);
   }
 
 void motor_turn_left()
 {
   Serial.println("TURN LEFT");
-  motors.leftDrive(100);
-  motors.rightDrive(-100);
+  motors.leftDrive(-90);
+  motors.rightDrive(120);
   }
 
 void motor_turn_right()
 {
   Serial.println("TURN RIGHT");
-  motors.leftDrive(-100);
-  motors.rightDrive(100);
+  motors.leftDrive(120);
+  motors.rightDrive(-90);
   }
